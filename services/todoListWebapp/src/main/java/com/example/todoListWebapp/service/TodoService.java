@@ -1,25 +1,27 @@
 package com.example.todoListWebapp.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.todoListWebapp.model.Todo;
 import com.example.todoListWebapp.repository.TodoProxy;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@AllArgsConstructor
 @Data
 @Service
 public class TodoService {
 
-	@Autowired
 	private TodoProxy todoProxy;
 
 	public Todo getTodo(final long id) {
 		return todoProxy.getTodo(id);
 	}
 	
-	public Iterable<Todo> getTodos() {
+	public List<Todo> getTodos() {
 		return todoProxy.getTodos();
 	}
 	

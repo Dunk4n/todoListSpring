@@ -1,27 +1,27 @@
 package com.example.todoListApi.service;
 
 import java.sql.Timestamp;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.todoListApi.model.Todo;
 import com.example.todoListApi.repository.TodoRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@AllArgsConstructor
 @Data
 @Service
 public class TodoService {
 
-	@Autowired
 	private TodoRepository todoRepository;
 	
 	public Todo saveTodo(Todo todo) {
-		Todo savedTodo = todoRepository.save(todo);
-		return savedTodo;
+		return todoRepository.save(todo);
 	}
 
 	public Optional<Todo> getTodo(final Long id) {
@@ -40,25 +40,8 @@ public class TodoService {
 		return isCompleted;
 	}
 	
-	public Iterable<Todo> getTodos() {
-		return todoRepository.findAll();
-	}
-
-	public Todo updateTodo(final Long id, Todo todo) {
-		try {
-			Todo updatedTodo = todoRepository.findById(id).get();
-			
-			updatedTodo.setTitle(todo.getTitle());
-			updatedTodo.setDescription(todo.getDescription());
-			updatedTodo.setOnDate(todo.getOnDate());
-			updatedTodo.setCardColor(todo.getCardColor());
-			updatedTodo.setCompleted(todo.isCompleted());
-			updatedTodo.setCompletedOn(todo.getCompletedOn());
-			
-			return todoRepository.save(updatedTodo);
-		} catch (NoSuchElementException e) {
-			return todoRepository.save(todo);
-		}
+	public Stream<Todo> getTodos() {
+		return StreamSupport.stream(todoRepository.findAll().spliterator(), false);
 	}
 
 	public void deleteTodo(final Long id) {

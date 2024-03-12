@@ -1,8 +1,8 @@
 package com.example.todoListWebapp.controller;
 
 import java.sql.Date;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +14,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.todoListWebapp.model.Todo;
 import com.example.todoListWebapp.service.TodoService;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Controller
 public class TodoController {
 
-	@Autowired
 	private TodoService service;
 	
 	@GetMapping("/")
 	public String home(Model model) {
-		Iterable<Todo> listTodo = service.getTodos();
+		List<Todo> listTodo = service.getTodos();
 		model.addAttribute("todos", listTodo);
 
 		return "home";

@@ -1,6 +1,6 @@
 function changeTodoCompleted(e, id)
 {
-	fetch('http://localhost:9001/todo/' + id + '/toggleCompleted')
+	fetch('http://localhost:9001/todo/' + id + '/toggle-completed')
 		.then(response => {
 			if (!response.ok)
 				throw new Error('Something went wrong');

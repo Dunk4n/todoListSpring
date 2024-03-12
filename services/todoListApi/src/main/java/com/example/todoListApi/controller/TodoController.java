@@ -1,8 +1,8 @@
 package com.example.todoListApi.controller;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.todoListApi.model.Todo;
 import com.example.todoListApi.service.TodoService;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @RestController
 public class TodoController {
 
-	@Autowired
 	private TodoService todoService;
 
 	/**
@@ -43,11 +45,7 @@ public class TodoController {
 	@GetMapping("/todo/{id}")
 	public Todo getTodo(@PathVariable("id") final Long id) {
 		Optional<Todo> todo = todoService.getTodo(id);
-		if(todo.isPresent()) {
-			return todo.get();
-		} else {
-			return null;
-		}
+		return todo.orElse(null);
 	}
 	
 	/**
@@ -56,7 +54,7 @@ public class TodoController {
 	* @return A boolean representing the isCompleted field
 	*/
 	@CrossOrigin(origins = "http://localhost:9000")
-	@GetMapping("/todo/{id}/toggleCompleted")
+	@GetMapping("/todo/{id}/toggle-completed")
 	public boolean toggleCompletedTodo(@PathVariable("id") final Long id) {
 		return todoService.toggleCompletedTodo(id);
 	}
@@ -66,7 +64,7 @@ public class TodoController {
 	* @return - An Iterable object of Todo full filled
 	*/
 	@GetMapping("/todos")
-	public Iterable<Todo> getTodos() {
+	public Stream<Todo> getTodos() {
 		return todoService.getTodos();
 	}
 
@@ -76,9 +74,9 @@ public class TodoController {
 	 * @param todo - The todo object updated
 	 * @return
 	 */
-	@PutMapping("/todo/{id}")
-	public Todo updateTodo(@PathVariable("id") final Long id, @RequestBody Todo todo) {
-		return todoService.updateTodo(id, todo);
+	@PutMapping("/todo")
+	public Todo updateTodo(@RequestBody Todo todo) {
+		return todoService.saveTodo(todo);
 	}
 
 	/**
